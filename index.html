@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="leetcodeManagerApp">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LeetCode Manager</title>
+    <link rel="stylesheet" href="./styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-calendar/dist/github-calendar.css">
+    <script src="https://cdn.jsdelivr.net/npm/github-calendar/dist/github-calendar.min.js"></script>
+</head>
+
+<body>
+    <!-- Box for DSA Logic -->
+    <div class="dsa-logic-box">
+        <h2>DSA Problem Solving Tips</h2>
+        <ul>
+            <li>Understand the problem statement thoroughly.</li>
+            <li>Identify the key data structures and algorithms required.</li>
+            <li>Break down the problem into smaller subproblems.</li>
+            <li>Write pseudocode or outline your approach before coding.</li>
+            <li>Test your solution with sample inputs and edge cases.</li>
+            <li>Optimize your solution if possible.</li>
+        </ul>
+    </div>
+
+    <div ng-controller="MainController" class="main-content">
+        <h1>LeetCode Manager</h1>
+        <form ng-submit="addProblem()">
+            <input type="text" placeholder="Problem Title" ng-model="newProblem.title" required>
+            <input type="text" placeholder="Problem URL" ng-model="newProblem.url" required>
+            <select ng-model="newProblem.difficulty" required>
+                <option value="">Select Difficulty</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+            <input type="text" placeholder="Tags (comma separated)" ng-model="newProblem.tags">
+            <button type="submit">Add Problem</button>
+        </form>
+        <ul>
+            <li ng-repeat="problem in problems">
+                <strong>{{ problem.title }}</strong><br>
+                <a href="{{ problem.url }}" target="_blank">{{ problem.url }}</a><br>
+                Difficulty: {{ problem.difficulty }}<br>
+                Tags: {{ problem.tags }}<br>
+                <button ng-click="editProblem(problem)" class="edit">Edit</button>
+                <button ng-click="deleteProblem(problem)" class="delete">Delete</button>
+            </li>
+        </ul>
+        <div ng-show="editMode">
+            <h2>Edit Problem</h2>
+            <form ng-submit="updateProblem()">
+                <input type="text" ng-model="editedProblem.title" required>
+                <input type="text" ng-model="editedProblem.url" required>
+                <select ng-model="editedProblem.difficulty" required>
+                    <option value="">Select Difficulty</option>
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+                <input type="text" ng-model="editedProblem.tags">
+                <button type="submit">Save</button>
+                <button ng-click="cancelEdit()">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- GitHub Heatmap Calendar -->
+    <div id="github-graph" class="calendar"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Include GitHub Calendar library -->
+    <script src="https://cdn.jsdelivr.net/npm/github-calendar/dist/github-calendar.min.js"></script>
+    <script>
+        angular.module('leetcodeManagerApp', [])
+            .controller('MainController', function ($scope, $http) {
+                $scope.problems = [];
+                $scope.newProblem = {};
+                $scope.editMode = false;
+                $scope.editedProblem = {};
+
+                // Fetch problems function
+                function fetchProblems() {
+                    $http.get('http://localhost:3000/problems')
+                        .then(function (response) {
+                            $scope.problems = response.data;
+                        })
+                        .catch(function (error) {
+                            console.error('Error fetching problems:', error);
+                        });
+                }
+
+                // Fetch problems when the controller is initialized
+                fetchProblems();
+
+                // Function to add a new problem
+                $scope.addProblem = function () {
+                    $http.post('http://localhost:3000/problems', $scope.newProblem)
+                        .then(function (response) {
+                            $scope.problems.push(response.data); // Add the new problem to the list
+                            $scope.newProblem = {}; // Clear the form
+                        })
+                        .catch(function (error) {
+                            console.error('Error adding problem:', error);
+                        });
+                };
+
+                // Function to edit a problem
+                $scope.editProblem = function (problem) {
+                    $scope.editMode = true;
+                    $scope.editedProblem = angular.copy(problem);
+                };
+
+                // Function to update a problem
+                $scope.updateProblem = function () {
+                    $http.put('http://localhost:3000/problems/' + $scope.editedProblem._id, $scope.editedProblem)
+                        .then(function () {
+                            fetchProblems(); // Fetch updated problems after updating
+                            $scope.editMode = false;
+                            $scope.editedProblem = {};
+                        })
+                        .catch(function (error) {
+                            console.error('Error updating problem:', error);
+                        });
+                };
+
+                // Function to cancel editing a problem
+                $scope.cancelEdit = function () {
+                    $scope.editMode = false;
+                    $scope.editedProblem = {};
+                };
+
+                // Function to delete a problem
+                $scope.deleteProblem = function (problem) {
+                    $http.delete('http://localhost:3000/problems/' + problem._id)
+                        .then(function () {
+                            fetchProblems(); // Fetch updated problems after deleting
+                            window.location.reload();
+                        })
+                        .catch(function (error) {
+                            console.error('Error deleting problem:', error);
+                        });
+                };
+            });
+
+        // Wait for the DOM to be ready
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fetch GitHub contributions data
+            GitHubCalendar(".calendar", "soxoj");
+        });
+    </script>
+
+    <style>
+        .dsa-logic-box {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .dsa-logic-box h2 {
+            margin-bottom: 10px;
+        }
+
+        .dsa-logic-box ul {
+            list-style-type: disc;
+            padding-left: 20px;
+        }
+    </style>
+</body>
+
+</html>

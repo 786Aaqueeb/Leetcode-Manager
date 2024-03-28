@@ -1,0 +1,162 @@
+/* Import Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
+
+/* Variable Declarations */
+:root {
+  --bg-color: #f6f8fa;
+  --text-color: #1d1f27;
+  --main-color: #3a3dbe;
+}
+
+/* Reset Styles */
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styles */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+/* Heading Styles */
+h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+form {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+form input[type="text"],
+form select {
+  width: calc(100% - 22px); /* Adjusted for border width and padding */
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+}
+
+form button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--main-color);
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* List Styles */
+ul {
+  list-style-type: none;
+  margin-top: 20px;
+}
+
+li {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+li strong {
+  font-size: 1.2rem;
+  color: var(--main-color);
+}
+
+li a {
+  color: var(--main-color);
+}
+
+/* Button Styles */
+.edit,
+.delete {
+  padding: 10px 20px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit {
+  background-color: #007bff;
+  margin-right: 5px;
+}
+
+.delete {
+  background-color: #dc3545;
+}
+
+/* Hidden Class */
+.hidden {
+  display: none;
+}
+
+/* Problem Entry Styles */
+.problem-entry {
+  transition: transform 0.3s ease-in-out;
+}
+
+.problem-entry:hover {
+  transform: translateY(-5px);
+}
+
+.problem-entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.problem-entry-header strong {
+  font-size: 1.2rem;
+}
+
+.problem-entry-details {
+  margin-bottom: 10px;
+}
+
+.problem-entry-details p {
+  margin: 5px 0;
+}
+
+.problem-entry-actions {
+  display: flex;
+  align-items: center;
+}
+
+.problem-entry-actions button {
+  margin-left: 5px;
+}
+
+/* DSA Logic Box Styles */
+.dsa-logic-box {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.dsa-logic-box h2 {
+  margin-bottom: 10px;
+}
+
+.dsa-logic-box ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
